@@ -1,0 +1,172 @@
+{
+  "model_name": "MLP Final",
+  "best_config": {
+    "hidden_layer_sizes": [
+      32,
+      16
+    ],
+    "alpha": 0.001
+  },
+  "target": "weekly_units",
+  "feature_cols": [
+    "lag_1",
+    "lag_2",
+    "lag_4",
+    "lag_52",
+    "rolling_mean_4",
+    "rolling_std_4",
+    "rolling_mean_8",
+    "momentum",
+    "recent_cv",
+    "month_sin",
+    "month_cos",
+    "woy_sin",
+    "woy_cos",
+    "near_payday",
+    "time_index",
+    "national_events",
+    "other_events",
+    "snap_days",
+    "avg_price",
+    "price_rolling_4",
+    "price_relative",
+    "store_traffic_lag1",
+    "cat_share_lag1"
+  ],
+  "combos": [
+    [
+      "CA_1",
+      "FOODS"
+    ],
+    [
+      "CA_1",
+      "HOBBIES"
+    ],
+    [
+      "CA_1",
+      "HOUSEHOLD"
+    ],
+    [
+      "CA_2",
+      "FOODS"
+    ],
+    [
+      "CA_2",
+      "HOBBIES"
+    ],
+    [
+      "CA_2",
+      "HOUSEHOLD"
+    ],
+    [
+      "CA_3",
+      "FOODS"
+    ],
+    [
+      "CA_3",
+      "HOBBIES"
+    ],
+    [
+      "CA_3",
+      "HOUSEHOLD"
+    ],
+    [
+      "CA_4",
+      "FOODS"
+    ],
+    [
+      "CA_4",
+      "HOBBIES"
+    ],
+    [
+      "CA_4",
+      "HOUSEHOLD"
+    ],
+    [
+      "TX_1",
+      "FOODS"
+    ],
+    [
+      "TX_1",
+      "HOBBIES"
+    ],
+    [
+      "TX_1",
+      "HOUSEHOLD"
+    ],
+    [
+      "TX_2",
+      "FOODS"
+    ],
+    [
+      "TX_2",
+      "HOBBIES"
+    ],
+    [
+      "TX_2",
+      "HOUSEHOLD"
+    ],
+    [
+      "TX_3",
+      "FOODS"
+    ],
+    [
+      "TX_3",
+      "HOBBIES"
+    ],
+    [
+      "TX_3",
+      "HOUSEHOLD"
+    ],
+    [
+      "WI_1",
+      "FOODS"
+    ],
+    [
+      "WI_1",
+      "HOBBIES"
+    ],
+    [
+      "WI_1",
+      "HOUSEHOLD"
+    ],
+    [
+      "WI_2",
+      "FOODS"
+    ],
+    [
+      "WI_2",
+      "HOBBIES"
+    ],
+    [
+      "WI_2",
+      "HOUSEHOLD"
+    ],
+    [
+      "WI_3",
+      "FOODS"
+    ],
+    [
+      "WI_3",
+      "HOBBIES"
+    ],
+    [
+      "WI_3",
+      "HOUSEHOLD"
+    ]
+  ],
+  "metrics_test": {
+    "model": "MLP Final",
+    "MAE": 4816.127477712161,
+    "RMSE": 8826.815535124126,
+    "MAPE": 32.038530074418745,
+    "R2": -0.19156501689652483,
+    "fit_time_total_sec": 49.12205322802765,
+    "fit_time_avg_sec": 1.6374017742675884,
+    "estimated_params_per_model": 1313.0,
+    "estimated_total_params": 39390.0
+  },
+  "artifact_file": "/Users/aeshagandhi/Downloads/MIDS-Sp26/IDS-705/ids705_project/artifacts/mlp/mlp_models.joblib",
+  "model_type": "mlp",
+  "model_scope": "per_combo"
+}

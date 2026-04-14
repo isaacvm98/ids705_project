@@ -1,4 +1,9 @@
 pandas
 numpy 
 matplotlib
-pip install pygam
+pygam
+scikit-learn
+lightgbm
+xgboost
+Path
+openpyxl

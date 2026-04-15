@@ -50,6 +50,6 @@ From a stakeholder perspective, the recommendation is straightforward. If the pr
 
 ## Figure Sources
 
-Figure 1: [figure_1_final_model_comparison.png](figures/figure_1_final_model_comparison.png). Generated for the memo from the final saved-model comparison results summarized in `notebooks/models/notebook_08_data_sufficiency.ipynb`.
+Figure 1: [figure_1_final_model_comparison.png](figures/figure_1_final_model_comparison.png). Generated for the memo from the final saved-model comparison results summarized in `notebooks/models/11_data_sufficiency.ipynb`.
 
-Figure 2: [figure_2_data_sufficiency_tradeoffs.png](figures/figure_2_data_sufficiency_tradeoffs.png). Generated for the memo from the Section 5 reduced-data experiment results in `notebooks/models/notebook_08_data_sufficiency.ipynb`.
+Figure 2: [figure_2_data_sufficiency_tradeoffs.png](figures/figure_2_data_sufficiency_tradeoffs.png). Generated for the memo from the Section 5 reduced-data experiment results in `notebooks/models/11_data_sufficiency.ipynb`.

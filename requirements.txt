@@ -1,10 +1,11 @@
-pandas
-numpy 
+jupyter
 matplotlib
+numpy
+openpyxl
+pandas
 pygam
 scikit-learn
+scipy
+shap
 lightgbm
 xgboost
-Path
-openpyxl
-shap

@@ -1,0 +1,51 @@
+model_name,feature_rank,feature,mean_abs_shap
+GAM (Plain Vanilla),1,avg_price,4493.272698929029
+GAM (Plain Vanilla),2,price_rolling_4,4472.753397573129
+GAM (Plain Vanilla),3,rolling_mean_4,1687.647719043425
+GAM (Plain Vanilla),4,lag_2,1213.1918391499628
+GAM (Plain Vanilla),5,store_id_TX_3,618.3923357872604
+GAM (Plain Vanilla),6,lag_4,529.6777520090722
+GAM (Plain Vanilla),7,rolling_mean_8,515.459753890966
+GAM (Plain Vanilla),8,cat_share_lag1,315.5066686943266
+GAM (Plain Vanilla),9,time_index,310.8445858797425
+GAM (Plain Vanilla),10,month_sin,265.21645510086233
+LightGBM (Pooled),1,lag_1,3471.6514620108037
+LightGBM (Pooled),2,rolling_mean_4,1589.1166417478853
+LightGBM (Pooled),3,lag_4,657.8202900343554
+LightGBM (Pooled),4,lag_2,220.5565445841525
+LightGBM (Pooled),5,lag_52,202.85971084763182
+LightGBM (Pooled),6,snap_days,157.32907865554859
+LightGBM (Pooled),7,time_index,86.6252833048029
+LightGBM (Pooled),8,woy_sin,45.066593033757776
+LightGBM (Pooled),9,cat_share_lag1,41.14321932241513
+LightGBM (Pooled),10,rolling_mean_8,38.68970783066157
+MLP Final,1,other_events,312.1071910877921
+MLP Final,2,store_traffic_lag1,166.20547645663495
+MLP Final,3,near_payday,127.83517460337758
+MLP Final,4,lag_2,102.23693117571162
+MLP Final,5,rolling_std_4,82.638965430628
+MLP Final,6,lag_4,65.46702265834675
+MLP Final,7,recent_cv,64.94858855645744
+MLP Final,8,lag_52,62.85965280109987
+MLP Final,9,rolling_mean_4,60.75068658276144
+MLP Final,10,lag_1,53.93887960517511
+RandomForest (Pooled),1,lag_1,2525.157007971157
+RandomForest (Pooled),2,rolling_mean_4,1813.1221490717687
+RandomForest (Pooled),3,lag_4,568.9408639090162
+RandomForest (Pooled),4,lag_2,527.8790321166629
+RandomForest (Pooled),5,rolling_mean_8,415.6833920342945
+RandomForest (Pooled),6,snap_days,107.08766442940093
+RandomForest (Pooled),7,lag_52,93.30718453484478
+RandomForest (Pooled),8,cat_share_lag1,47.26529021089633
+RandomForest (Pooled),9,store_traffic_lag1,46.184979936696955
+RandomForest (Pooled),10,momentum,33.71769112889803
+Ridge (CV alpha),1,snap_days,211.55662790123162
+Ridge (CV alpha),2,other_events,67.64622046532203
+Ridge (CV alpha),3,near_payday,51.84961185837689
+Ridge (CV alpha),4,momentum,50.93424974760555
+Ridge (CV alpha),5,lag_1,45.76069014907612
+Ridge (CV alpha),6,lag_2,42.874804687527345
+Ridge (CV alpha),7,lag_4,37.90892908509954
+Ridge (CV alpha),8,store_traffic_lag1,34.763024914529076
+Ridge (CV alpha),9,rolling_std_4,30.66280778690144
+Ridge (CV alpha),10,recent_cv,25.50710420497906

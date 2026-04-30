@@ -1,69 +1,102 @@
 # IDS 705 Final Project: Retail Demand Forecasting
 
-## Overview
+## What This Repository Is
 
-This repository contains our IDS 705 final project on weekly retail demand forecasting using the M5 Walmart dataset. The goal of the project is to compare forecasting approaches across a range of model classes, from simple baselines to regularized linear models, tree ensembles, a generalized additive model (GAM), and a neural network benchmark. We evaluate not only predictive accuracy, but also model stability, interpretability, and data sufficiency.
+This repository contains our final IDS 705 project on weekly retail demand forecasting using the M5 Walmart dataset. The project asks three practical questions:
 
-Our modeling target is aggregated weekly unit sales at the `store × category × week` level. We chose this level of aggregation to balance practical relevance with tractable model comparison. In the final analysis, Ridge, LightGBM, and Random Forest were the strongest overall performers, while the GAM provided a useful interpretable nonlinear benchmark and the MLP served as a higher-complexity comparison point.
+1. Which model family gives the strongest out-of-sample forecast accuracy?
+2. How much historical data is needed before forecasts become reliable?
+3. How much accuracy can be retained while keeping the model interpretable?
 
-This repository includes:
+To answer those questions, we compare naive baselines, linear models, tree ensembles, a generalized additive model (GAM), and a neural-network benchmark on the same store-category-week forecasting task. We evaluate accuracy, data sufficiency, runtime, and interpretability rather than treating the problem as a single-metric leaderboard.
 
-- the raw data files used in the project
-- preprocessing and feature engineering notebooks
-- model-specific notebooks for each model family
-- saved model artifacts and outputs
-- report materials used for the final submission
+The modeling target is **weekly unit sales aggregated to the `store × category × week` level**. This keeps the problem operationally meaningful while making a multi-model comparison feasible within a course project.
 
-## Repository Structure
+## Repository Layout
 
 ```text
 ids705_project/
-├── artifacts/                  # Saved fitted models and metadata
-├── clean_data/                 # Processed weekly data and train/test splits
+├── artifacts/                  # Saved final-model artifacts and metadata
+├── clean_data/                 # Generated processed data (created by preprocessing)
 ├── notebooks/
-│   ├── data/                   # Raw M5 data files used by the project
-│   ├── artifacts/              # Legacy notebook-local artifacts (not canonical)
-│   └── models/                 # All project notebooks and helper scripts
-├── outputs/                    # Model outputs, evaluation tables, and plots
-├── reports/                    # Memo/report drafts and final-report figures
+│   ├── data/                   # Location where the raw M5 files should be placed
+│   └── models/                 # Main project notebooks and helper script
+├── outputs/                    # Saved model outputs and interpretability plots
+├── reports/                    # Final report, memo materials, and report figures
 ├── requirements.txt            # Python dependencies
 └── README.md
 ```
 
-The canonical locations are:
+The main notebooks used in the final project are:
 
-- raw data: `notebooks/data/`
-- processed data: `clean_data/`
-- saved model artifacts: `artifacts/`
-- runnable notebooks: `notebooks/models/`
+- `01_data_loading_and_eda.ipynb`
+- `02_preprocessing_and_feature_engineering.ipynb`
+- `03_baseline_and_linear_models.ipynb`
+- `05_random_forest.ipynb`
+- `06_lightgbm.ipynb`
+- `07_gam.ipynb`
+- `08_mlp.ipynb`
+- `11_data_sufficiency_and_comparison.ipynb`
+
+Additional notebooks in `notebooks/models/` are supporting or iterative analysis notebooks kept for project transparency.
+
+The notebooks include markdown explanations and inline code comments so that each preprocessing, modeling, and evaluation step can be followed directly in the project files.
 
 ## Data
 
-We use the M5 Walmart forecasting dataset. The repository already includes the raw files needed to reproduce the project in `notebooks/data/`:
+This project uses the **M5 Forecasting Accuracy** dataset from Walmart.
 
-- `sales_train_evaluation.csv`
-- `sales_train_validation.csv`
+### Raw data needed
+
+Place the following files in `notebooks/data/` before running the notebooks:
+
 - `calendar.csv`
 - `sell_prices.csv`
+- `sales_train_evaluation.csv`
+- `sales_train_validation.csv`
 - `sample_submission.csv`
 
-The project does not model item-level daily demand directly. Instead, the preprocessing pipeline aggregates the data to weekly demand at the `store × category` level. The main processed outputs are:
+### How to get the data
 
-- `clean_data/weekly_agg_sales.csv`
-- `clean_data/weekly_features.csv`
-- `clean_data/test.csv`
-- `clean_data/training.csv`
+The raw files are not currently committed in this repository. Download them from the Kaggle M5 competition page:
 
-Some notebooks also regenerate `clean_data/train.csv` and `clean_data/test.csv` during preprocessing. In practice:
+<https://www.kaggle.com/competitions/m5-forecasting-accuracy/data>
 
-- `training.csv` / `test.csv` are used by the pooled-model workflow
-- `train.csv` / `test.csv` are regenerated by the preprocessing notebook and used by the linear and MLP notebooks
+After downloading, create the directory if needed and copy the files there:
 
-If you want to reproduce the full project from raw data, run the notebooks in the order listed below. That will regenerate the processed files from scratch.
+```bash
+mkdir -p notebooks/data
+```
+
+Then place the five CSV files listed above inside `notebooks/data/`.
+
+### What preprocessing does
+
+The preprocessing pipeline:
+
+- loads the item-level daily M5 data
+- aggregates daily sales to weekly `store × category` demand
+- engineers lag, rolling, calendar, event, SNAP, and price features
+- creates train/test tables for the downstream model notebooks
+
+The main generated files are written to `clean_data/`, including:
+
+- `weekly_agg_sales.csv`
+- `weekly_features.csv`
+- `train.csv`
+- `test.csv`
+
+Some later notebooks use the filename `training.csv` instead of `train.csv`. If you are reproducing the full workflow from scratch, create that alias after running Notebook 02:
+
+```bash
+cp clean_data/train.csv clean_data/training.csv
+```
+
+That keeps the GAM and pooled-model workflows aligned with the preprocessing outputs.
 
 ## Environment Setup
 
-We recommend Python 3.12 and a virtual environment.
+We recommend **Python 3.12** and a virtual environment.
 
 ### 1. Create and activate a virtual environment
 
@@ -82,116 +115,73 @@ pip install -r requirements.txt
 ### 3. Launch Jupyter
 
 ```bash
-jupyter notebook
+jupyter lab
 ```
 
 or
 
 ```bash
-jupyter lab
+jupyter notebook
 ```
 
-## How to Reproduce the Project
+## Reproducing the Project
 
-All notebooks needed for the final project are in `notebooks/models/`.
+All final-project notebooks are in `notebooks/models/`.
 
-### Recommended run order
+### Full rerun from raw data
 
-#### Data preparation
+Run the notebooks in this order:
 
 1. `01_data_loading_and_eda.ipynb`
    - loads the raw M5 data
-   - reshapes it to weekly `store × category` demand
+   - aggregates daily item sales to weekly `store × category` demand
    - saves `clean_data/weekly_agg_sales.csv`
 
 2. `02_preprocessing_and_feature_engineering.ipynb`
-   - builds lags, rolling statistics, calendar features, event features, SNAP features, and price features
-   - creates processed train/test splits for downstream notebooks
-   - saves feature tables to `clean_data/`
+   - builds lag, rolling, calendar, event, SNAP, and price features
+   - creates the processed train/test splits
+   - saves `clean_data/train.csv`, `clean_data/test.csv`, and `clean_data/weekly_features.csv`
 
-#### Baselines and core model families
+3. Create the pooled-workflow alias:
 
-3. `03_baseline_and_linear_models.ipynb`
-   - fits naive baselines and regularized linear models
-   - saves the best Ridge artifacts to `artifacts/ridge/`
+   ```bash
+   cp clean_data/train.csv clean_data/training.csv
+   ```
 
-4. `05_random_forest.ipynb`
-   - fits and tunes pooled Random Forest models
-   - saves the best Random Forest artifact to `artifacts/random_forest/`
+4. `03_baseline_and_linear_models.ipynb`
+   - runs naive baselines and regularized linear models
+   - saves the final Ridge artifact to `artifacts/ridge/`
 
-5. `06_lightgbm.ipynb`
-   - fits and tunes pooled LightGBM models
-   - saves the best LightGBM artifact to `artifacts/lightgbm/`
+5. `05_random_forest.ipynb`
+   - fits and tunes the pooled Random Forest model
+   - saves the best artifact to `artifacts/random_forest/`
 
-6. `07_gam.ipynb`
+6. `06_lightgbm.ipynb`
+   - fits and tunes the pooled LightGBM model
+   - saves the best artifact to `artifacts/lightgbm/`
+
+7. `07_gam.ipynb`
    - fits the GAM benchmark
-   - writes GAM outputs and artifact files
+   - saves GAM outputs and metadata
 
-7. `08_mlp.ipynb`
-   - fits the MLP benchmark
+8. `08_mlp.ipynb`
+   - fits the neural-network benchmark
    - saves the final MLP artifact to `artifacts/mlp/`
 
-#### Evaluation and interpretation
+9. `11_data_sufficiency_and_comparison.ipynb`
+   - loads the saved final-model artifacts
+   - runs the reduced-history and Pareto-vs-full data sufficiency experiments
+   - synthesizes cross-model comparison and interpretability outputs
 
-8. `09_tree_shap_analysis.ipynb`
-   - contains the original tree-model SHAP analysis
+### Fastest way to inspect final results
 
-9. `10_tree_model_evaluation.ipynb`
-   - contains model evaluation tables for the pooled tree workflows
+If you do not want to retrain every model, you can start once:
 
-10. `11_data_sufficiency_and_comparison.ipynb`
-    - loads saved artifacts from all final models
-    - runs data sufficiency experiments
-    - compares full-data vs. Pareto-subset training
-    - includes cross-model SHAP comparison and project-level interpretation
+- the raw M5 data have been downloaded
+- Notebooks 01 and 02 have been run
+- `clean_data/training.csv` has been created from `clean_data/train.csv`
 
-## What Each Notebook Does
-
-### Core project notebooks
-
-- `01_data_loading_and_eda.ipynb`
-  - exploratory data analysis and weekly aggregation
-
-- `02_preprocessing_and_feature_engineering.ipynb`
-  - shared feature engineering and split construction
-
-- `03_baseline_and_linear_models.ipynb`
-  - naive baselines, lasso/ridge-style linear models, evaluation plots
-
-- `08_mlp.ipynb`
-  - neural network benchmark, comparison to baselines, saved artifact output
-
-- `11_data_sufficiency_and_comparison.ipynb`
-  - cross-model sufficiency experiments, Pareto analysis, SHAP comparison, synthesis
-
-### Tree-model notebooks
-
-- `04_tree_data_loader.ipynb`
-  - helper loading workflow for the pooled tree models
-
-- `05_random_forest.ipynb`
-  - Random Forest tuning and training
-
-- `06_lightgbm.ipynb`
-  - LightGBM tuning and training
-
-- `09_tree_shap_analysis.ipynb`
-  - original tree SHAP notebook
-
-- `10_tree_model_evaluation.ipynb`
-  - pooled model evaluation outputs
-
-- `data_loader_00.py`
-  - helper script used by the tree-model notebooks
-
-### GAM notebook
-
-- `07_gam.ipynb`
-  - GAM training, evaluation, and interpretability outputs
-
-## Saved Outputs and Artifacts
-
-The project uses an artifact-driven workflow for its final comparison and data sufficiency analysis. Final model notebooks save both fitted models and metadata. These are stored in:
+At that point you can use the already committed final-model artifacts in:
 
 - `artifacts/ridge/`
 - `artifacts/random_forest/`
@@ -199,65 +189,118 @@ The project uses an artifact-driven workflow for its final comparison and data s
 - `artifacts/gam/`
 - `artifacts/mlp/`
 
-Each artifact folder contains:
+and run:
 
-- a fitted model object or model bundle (`.joblib`)
-- a metadata file (`*_metadata.json`) describing the model type, feature set, and configuration
+- `11_data_sufficiency_and_comparison.ipynb`
 
-The final evaluation and sufficiency notebook loads these artifact files directly so that the final comparison can be reproduced consistently across model families.
+This is the most direct way to reproduce the final comparison phase used in the report.
 
-## Reproducing the Final Results
+## What Each Main Notebook Does
 
-For a full rerun from raw data:
+### Core workflow
 
-1. run `01_data_loading_and_eda.ipynb`
-2. run `02_preprocessing_and_feature_engineering.ipynb`
-3. run the modeling notebooks:
-   - `03_baseline_and_linear_models.ipynb`
-   - `05_random_forest.ipynb`
-   - `06_lightgbm.ipynb`
-   - `07_gam.ipynb`
-   - `08_mlp.ipynb`
-4. run `11_data_sufficiency_and_comparison.ipynb`
+- `01_data_loading_and_eda.ipynb`
+  - raw-data loading, weekly aggregation, and exploratory analysis
 
-If you only want to reproduce the final comparison and sufficiency phase, you can begin from the saved processed data and saved artifacts already included in the repository, then run:
+- `02_preprocessing_and_feature_engineering.ipynb`
+  - shared feature engineering and downstream split construction
 
-```text
-11_data_sufficiency_and_comparison.ipynb
-```
+- `03_baseline_and_linear_models.ipynb`
+  - naive baselines, linear models, evaluation, and Ridge artifact saving
 
-## Notes on Reproducibility
+- `07_gam.ipynb`
+  - GAM benchmark, evaluation, and interpretable output generation
 
-- The repository includes both raw data and preprocessing code.
-- The repository includes saved model artifacts so the final cross-model comparison can be rerun without retraining every model from scratch.
-- Some notebooks were developed by different teammates and use slightly different processed split filenames (`train.csv` versus `training.csv`). The final project workflow documents both conventions above.
-- The canonical final comparison notebook is `11_data_sufficiency_and_comparison.ipynb`.
+- `08_mlp.ipynb`
+  - neural-network benchmark and artifact saving
+
+- `11_data_sufficiency_and_comparison.ipynb`
+  - final comparison, data sufficiency, Pareto analysis, and cross-model interpretation
+
+### Tree-model workflow
+
+- `04_tree_data_loader.ipynb`
+  - helper notebook for pooled-model loading logic
+
+- `05_random_forest.ipynb`
+  - Random Forest fitting and tuning
+
+- `06_lightgbm.ipynb`
+  - LightGBM fitting and tuning
+
+- `09_tree_shap_analysis.ipynb`
+  - original tree-based SHAP notebook
+
+- `10_tree_model_evaluation.ipynb`
+  - pooled tree-model evaluation outputs
+
+- `data_loader_00.py`
+  - helper script used by the pooled tree-model notebooks
+
+## Artifacts and Outputs
+
+Final-model notebooks save fitted model objects and metadata into `artifacts/`. Each model folder contains:
+
+- a saved model or model bundle (`.joblib`)
+- a metadata file (`*_metadata.json`)
+
+These artifacts are used by the final comparison notebook so that model selection and data sufficiency experiments can be run in a consistent, reproducible way.
+
+Saved report-facing figures and supporting outputs are in:
+
+- `reports/figures/`
+- `outputs/`
 
 ## Dependencies
 
-All required Python packages are listed in `requirements.txt`.
+The required Python dependencies are listed in `requirements.txt`. The current project uses:
 
-If you encounter environment-specific issues:
+- `jupyter`
+- `joblib`
+- `lightgbm`
+- `matplotlib`
+- `numpy`
+- `openpyxl`
+- `pandas`
+- `pygam`
+- `scikit-learn`
+- `scipy`
+- `shap`
+- `statsmodels`
 
-- LightGBM on macOS may require `libomp`
-- SHAP analysis requires the `shap` package to be installed in the same Jupyter kernel that runs the notebook
+### Environment notes
+
+- On macOS, `lightgbm` may require `libomp`. If import fails, install it with Homebrew:
+
+  ```bash
+  brew install libomp
+  ```
+
+- SHAP must be installed in the same Jupyter kernel that runs the notebook.
+
+## What the Final Results Support
+
+The final report and appendix are based on this codebase. At a high level, the project found:
+
+- Ridge, LightGBM, and Random Forest were the strongest overall forecasting models
+- the tuned GAM remained a credible interpretable alternative
+- the MLP benchmark did not outperform the stronger tabular methods
+- LightGBM was the most stable model under reduced-history data sufficiency tests
 
 ## Final Deliverables
 
-This repository supports two related deliverables:
+This repository contains both the analysis code and the written submission materials:
 
-- the final report and technical appendix in `reports/`
-- the fully reproducible project codebase used to generate the analysis
+- code and notebooks: `notebooks/models/`
+- saved model artifacts: `artifacts/`
+- report materials and report figures: `reports/`
 
-The report-facing materials are in `reports/`, while the full modeling and evaluation workflow is in `notebooks/models/`.
+## Notes for Grading / Testing
 
-## Team Project Scope
+1. install the environment from `requirements.txt`
+2. place the raw M5 files in `notebooks/data/`
+3. run Notebooks 01 and 02
+4. create `clean_data/training.csv` from `clean_data/train.csv`
+5. run any final model notebook or run `11_data_sufficiency_and_comparison.ipynb`
 
-This project was organized around four major modeling areas:
-
-- preprocessing and feature engineering
-- baseline and linear models
-- tree ensembles and interpretability
-- neural networks, evaluation synthesis, and data sufficiency
-
-The final repository brings these parts together into a single reproducible workflow for weekly retail demand forecasting.
+This reflects the actual current project workflow in the repository.
